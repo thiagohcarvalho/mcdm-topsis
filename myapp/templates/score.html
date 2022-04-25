@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+
+  <body>
+    <ul>
+      <p>Ranqueamento Topsis</p>
+      {% for alternative in ranking %}
+          <p>{{ alternative.0 }} - <span class="text-orientation-right-css">{{ alternative.1 }}</span></p>
+      {% endfor %}
+    </ul>
+
+    <ul>
+      <p>Ranqueamento Topsis Invertido</p>
+      {% for alternative in ranking_inverted %}
+          <p>{{ alternative.0 }} - <span class="text-orientation-right-css">{{ alternative.1 }}</span></p>
+      {% endfor %}
+    </ul>
+
+    <button onclick="location.href = '/'">Clique aqui para voltar à tela inicial</button>
+  </body>
+</html>
