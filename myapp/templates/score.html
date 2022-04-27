@@ -8,7 +8,28 @@
   </head>
 
   <body>
+
+    
     <ul>
+      <p>Normalização</p>
+      {{ normalization_scores }}
+
+      <p>Matriz multiplicada pelos pesos</p>
+      {{ weighted_matrix }}
+
+      <p>Ideal Positivo</p>
+      {{ step4.0 }}
+      <p>Ideal Negativo</p>
+      {{ step4.1 }}
+
+      <p>d+</p>
+      {{ find_distance.0 }}
+      <p>d-</p>
+      {{ find_distance.1 }}
+
+      <p>D</p>
+      {{ find_D }}
+
       <p>Ranqueamento Topsis</p>
       {% for alternative in ranking %}
           <p>{{ alternative.0 }} - <span class="text-orientation-right-css">{{ alternative.1 }}</span></p>

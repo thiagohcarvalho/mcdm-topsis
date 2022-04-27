@@ -20,6 +20,7 @@ class Topsis:
         self.column_size = len(matrix[0])  # amount of criteria
 
     def normalize_matrix(self):  # to find the normalization score #step2
+        np.set_printoptions(suppress=True)
         self.normalized_matrix = np.copy(self.matrix)
         squared_sum = np.zeros(self.column_size)
 
@@ -32,12 +33,16 @@ class Topsis:
                 self.normalized_matrix[i, j] = float(
                     self.matrix[i, j]/(squared_sum[j]**0.5))
 
+        return np.round_(np.sqrt(squared_sum), decimals=5)
+
     def weight_matrix(self):  # to multiply the values to their weights #step3
         self.weighted_matrix = np.copy(self.normalized_matrix)
 
         for i in range(self.row_size):
             for j in range(self.column_size):
                 self.weighted_matrix[i, j] *= self.weight[j]
+
+        return self.weighted_matrix
 
     def best_worst_ideal_solution(self):  # step4
         self.best_ideal_solution = np.zeros(self.column_size)
@@ -53,6 +58,8 @@ class Topsis:
             elif self.criteria[i] == False:  # caso o menor valor seja o ideal positivo
                 self.best_ideal_solution[i] = lowest_values[i]
                 self.worst_ideal_solution[i] = highest_values[i]
+
+        return (self.best_ideal_solution, self.worst_ideal_solution)
 
     def find_distance(self):  # step5
         self.positive_distance = np.zeros(self.row_size)
@@ -72,6 +79,8 @@ class Topsis:
                     distance_neg = distance_neg**0.5
                     self.negative_distance[i] = distance_neg
 
+        return (self.positive_distance, self.negative_distance)
+
     def find_similarity_worse_decision(self):  # step 6
         np.seterr(all='ignore')
         dtype = [("alternative-name", 'U16'), ("score", float)]
@@ -81,6 +90,8 @@ class Topsis:
             value = self.negative_distance[i] / \
                 (self.positive_distance[i] + self.negative_distance[i])
             self.scores[i] = (self.alternative_list[i], value)
+
+        return self.scores
 
     def ranking_by_worst(self):
         self.ranking = np.sort(self.scores, order="score")[::-1]

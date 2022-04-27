@@ -87,15 +87,16 @@ def topsis_score(request):
 
     topsis = Topsis(matrix, criteria, weight, alternative_list)
 
-    topsis.normalize_matrix()
-    topsis.weight_matrix()
-    topsis.best_worst_ideal_solution()
-    topsis.find_distance()
-    topsis.find_similarity_worse_decision()
+    normalization_scores = topsis.normalize_matrix()
+    weighted_matrix = topsis.weight_matrix()
+    step4 = topsis.best_worst_ideal_solution()
+    find_distance = topsis.find_distance()
+    find_D = topsis.find_similarity_worse_decision()
     score = topsis.ranking_by_worst()
     score_inverted = topsis.ranking_by_worst_inverted()
 
-    context = {'ranking': score, 'ranking_inverted': score_inverted}
+    context = {'normalization_scores': normalization_scores, 'weighted_matrix': weighted_matrix, 'step4': step4,
+               'find_distance': find_distance, 'find_D': find_D, 'ranking': score, 'ranking_inverted': score_inverted}
     return render(request, 'score.html', context)
 
 
