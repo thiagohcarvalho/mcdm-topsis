@@ -4,44 +4,49 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'scores.css' %}">
+    <title>Topsis Scores</title>
   </head>
 
   <body>
+    <div>
 
+      <ul>
+        <p>Normalização</p>
+        {{ normalization_scores }}
+  
+        <p>Matriz multiplicada pelos pesos</p>
+        {{ weighted_matrix }}
+  
+        <p>Ideal Positivo</p>
+        {{ step4.0 }}
+        <p>Ideal Negativo</p>
+        {{ step4.1 }}
+  
+        <p>d+</p>
+        {{ find_distance.0 }}
+        <p>d-</p>
+        {{ find_distance.1 }}
+  
+        <p>D</p>
+        {{ find_D }}
+  
+        <p>Ranqueamento Topsis</p>
+        {% for alternative in ranking %}
+            <p>{{ alternative.0 }} - <span class="text-orientation-right-css">{{ alternative.1 }}</span></p>
+        {% endfor %}
+      </ul>
+  
+      <ul>
+        <p>Ranqueamento Topsis Invertido</p>
+        {% for alternative in ranking_inverted %}
+            <p>{{ alternative.0 }} - <span class="text-orientation-right-css">{{ alternative.1 }}</span></p>
+        {% endfor %}
+      </ul>
+      
+    </div>
     
-    <ul>
-      <p>Normalização</p>
-      {{ normalization_scores }}
-
-      <p>Matriz multiplicada pelos pesos</p>
-      {{ weighted_matrix }}
-
-      <p>Ideal Positivo</p>
-      {{ step4.0 }}
-      <p>Ideal Negativo</p>
-      {{ step4.1 }}
-
-      <p>d+</p>
-      {{ find_distance.0 }}
-      <p>d-</p>
-      {{ find_distance.1 }}
-
-      <p>D</p>
-      {{ find_D }}
-
-      <p>Ranqueamento Topsis</p>
-      {% for alternative in ranking %}
-          <p>{{ alternative.0 }} - <span class="text-orientation-right-css">{{ alternative.1 }}</span></p>
-      {% endfor %}
-    </ul>
-
-    <ul>
-      <p>Ranqueamento Topsis Invertido</p>
-      {% for alternative in ranking_inverted %}
-          <p>{{ alternative.0 }} - <span class="text-orientation-right-css">{{ alternative.1 }}</span></p>
-      {% endfor %}
-    </ul>
 
     <button onclick="location.href = '/'">Clique aqui para voltar à tela inicial</button>
   </body>

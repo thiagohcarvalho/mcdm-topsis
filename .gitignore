@@ -5,3 +5,5 @@ db.sqlite3
 backup
 
 __pycache__/
+
+requirements

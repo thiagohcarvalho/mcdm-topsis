@@ -9,7 +9,6 @@ import os
 
 
 def my_view(request):
-    print(f"Great! You're using Python 3.6+. If you fail here, use the right version.")
     message = 'Upload as many files as you want!'
     # Handle file upload
     if request.method == 'POST':
@@ -38,9 +37,13 @@ def topsis_score(request):
     matrix = []
     weight = []
     criteria = []
-    document = Document.objects.latest('id')
-    while True:
+    if request.method == 'POST':  # if user is reusing an already uploaded file
+        doc = request.POST.get("filename")  # request.post.get returns a dict
+        doc = os.path.abspath(os.getcwd()) + doc
+    else:  # if user is sending a file
+        document = Document.objects.latest('id')
         doc = document.docfile.path
+    while True:
         file_extension = os.path.splitext(doc)
         if file_extension[1] == ".csv":
             arq = open(doc, 'r')
@@ -55,7 +58,7 @@ def topsis_score(request):
                             criteria.append(False)
 
                 elif row[0] == '':
-                    a = 1
+                    pass
                 elif row[0] == 'pesos':
                     del row[0]
                     for s in row:
@@ -98,8 +101,3 @@ def topsis_score(request):
     context = {'normalization_scores': normalization_scores, 'weighted_matrix': weighted_matrix, 'step4': step4,
                'find_distance': find_distance, 'find_D': find_D, 'ranking': score, 'ranking_inverted': score_inverted}
     return render(request, 'score.html', context)
-
-
-def delete_files(request):
-    Document.objects.all().delete()
-    return render(request, 'list.html')

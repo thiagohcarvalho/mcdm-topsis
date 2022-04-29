@@ -3,22 +3,27 @@
     <head>
         <meta charset="utf-8">
         <title>Topsis Score</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'scores.css' %}">
     </head>
 
     <body>
-        <!-- List of uploaded documents -->
         {% if documents %}
             All documents in the database:
             <ul>
                 {% for document in documents %}
-                    <li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li>
+                    <form action="{% url "topsis-score" %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" value="{{ document.docfile.url }}" name="filename">{{ document.docfile.name }}</button>
+                    </form>
+
                 {% endfor %}
             </ul>
         {% else %}
             <p>No documents.</p>
         {% endif %}
 
-        <!-- Upload form. Note enctype attribute! -->
+        <!-- Upload form. -->
         <form action="{% url "my-view" %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             
@@ -36,9 +41,7 @@
             <p><input type="submit" value="Upload"/></p>
         </form>
 
-        <form action="{% url "delete-files" %}" method="get">
-            <button onClick="window.location.href=window.location.href">Clique aqui para deletar os arquivos</button>
-        </form>
+        
 
     </body>
 </html>
