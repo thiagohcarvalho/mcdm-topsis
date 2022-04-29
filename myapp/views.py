@@ -10,7 +10,6 @@ import os
 
 def my_view(request):
     message = 'Upload as many files as you want!'
-    # Handle file upload
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
@@ -40,7 +39,7 @@ def topsis_score(request):
     if request.method == 'POST':  # if user is reusing an already uploaded file
         doc = request.POST.get("filename")  # request.post.get returns a dict
         doc = os.path.abspath(os.getcwd()) + doc
-    else:  # if user is sending a file
+    else:  # if user is sending a new file
         document = Document.objects.latest('id')
         doc = document.docfile.path
     while True:
@@ -101,3 +100,9 @@ def topsis_score(request):
     context = {'normalization_scores': normalization_scores, 'weighted_matrix': weighted_matrix, 'step4': step4,
                'find_distance': find_distance, 'find_D': find_D, 'ranking': score, 'ranking_inverted': score_inverted}
     return render(request, 'score.html', context)
+
+
+def delete_files(request):
+    if request.method == "POST":
+        Document.objects.all().delete()
+    return redirect('my-view')

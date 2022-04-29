@@ -19,9 +19,14 @@
 
                 {% endfor %}
             </ul>
-        {% else %}
+            {% else %}
             <p>No documents.</p>
-        {% endif %}
+            {% endif %}
+            
+        <form action="{% url "delete-files" %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" value="1">Clique aqui para deletar os arquivos</button>
+        </form>
 
         <!-- Upload form. -->
         <form action="{% url "my-view" %}" method="post" enctype="multipart/form-data">
@@ -41,7 +46,6 @@
             <p><input type="submit" value="Upload"/></p>
         </form>
 
-        
 
     </body>
 </html>
