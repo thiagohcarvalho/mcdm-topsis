@@ -1,52 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {% load static %}
-    <link rel="stylesheet" href="{% static 'scores.css' %}">
-    <title>Topsis Scores</title>
+    <link rel="stylesheet" href="../static/list.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
     <div>
+      <ul>
+        <h3>Normalização</h3>
 
-      <ul>
-        <p>Normalização</p>
-        {{ normalization_scores }}
-  
-        <p>Matriz multiplicada pelos pesos</p>
-        {{ weighted_matrix }}
-  
-        <p>Ideal Positivo</p>
-        {{ step4.0 }}
-        <p>Ideal Negativo</p>
-        {{ step4.1 }}
-  
-        <p>d+</p>
-        {{ find_distance.0 }}
-        <p>d-</p>
-        {{ find_distance.1 }}
-  
-        <p>D</p>
-        {{ find_D }}
-  
-        <p>Ranqueamento Topsis</p>
+        <div class="flex">
+          {% for score in normalization_scores %}
+          <div class="flexElement">{{score}}</div>
+
+          {% endfor %}
+        </div>
+        
+        <div class="couple">
+
+          <div class="matriz">
+            <h3>Matriz com valores normalizados e multiplicados pelos pesos</h3>
+            {{weighted_matrix|safe}}
+          </div>
+
+          <div class="holder">
+            <div>
+              <p>d+</p>
+              <div class="flexColumn">
+                {% for euclidean_distance in find_distance.0 %}
+                <div class="flexElement">{{euclidean_distance}}</div>
+                {% endfor %}
+              </div>
+            </div>
+            <div>
+              <p>d-</p>
+              <div class="flexColumn">
+                {% for euclidean_distance in find_distance.1 %}
+                <div class="flexElement">{{euclidean_distance}}</div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <h3>Ideal Positivo</h3>
+        <div class="flex">
+          {% for ideal_solution in step4.0 %}
+          <div class="flexElement">{{ideal_solution}}</div>
+          {% endfor %}
+        </div>
+
+        <h3>Ideal Negativo</h3>
+        <div class="flex">
+          {% for ideal_solution in step4.1 %}
+          <div class="flexElement">{{ideal_solution}}</div>
+          {% endfor %}
+        </div>
+
+        
+
+        <h3>Ranqueamento Topsis</h3>
         {% for alternative in ranking %}
-            <p>{{ alternative.0 }} - <span class="text-orientation-right-css">{{ alternative.1 }}</span></p>
+        <p class="gridElement lista">
+          {{ alternative.0 }} -
+          <span class="text-orientation-right-css">{{ alternative.1 }}</span>
+        </p>
         {% endfor %}
       </ul>
-  
-      <ul>
-        <p>Ranqueamento Topsis Invertido</p>
-        {% for alternative in ranking_inverted %}
-            <p>{{ alternative.0 }} - <span class="text-orientation-right-css">{{ alternative.1 }}</span></p>
-        {% endfor %}
-      </ul>
-      
     </div>
-    
-    <button onclick="location.href = '/'">Clique aqui para voltar à tela inicial</button>
+
+    <button class="button-85" onclick="location.href = '/'">
+      Clique aqui para voltar à tela inicial
+    </button>
   </body>
 </html>

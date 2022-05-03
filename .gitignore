@@ -4,8 +4,6 @@ db.sqlite3
 
 __pycache__/
 
-requirements
-
 *.egg-info
 *.pot
 *.py[co]

@@ -1,8 +1,5 @@
 import numpy as np
-import csv
-import re
-from .models import Document
-from django.shortcuts import redirect, render
+import pandas as pd
 
 
 class Topsis:
@@ -42,7 +39,7 @@ class Topsis:
             for j in range(self.column_size):
                 self.weighted_matrix[i, j] *= self.weight[j]
 
-        return self.weighted_matrix
+        return pd.DataFrame(self.weighted_matrix)
 
     def best_worst_ideal_solution(self):  # step4
         self.best_ideal_solution = np.zeros(self.column_size)

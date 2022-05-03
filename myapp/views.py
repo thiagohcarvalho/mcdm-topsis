@@ -6,10 +6,11 @@ from .topsis import Topsis
 import csv
 import re
 import os
+import numpy as np
 
 
 def my_view(request):
-    message = 'Upload as many files as you want!'
+    message = 'Envie quantos arquivos quiser!'
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
@@ -18,14 +19,12 @@ def my_view(request):
 
             return redirect('topsis-score')
         else:
-            message = 'The form is not valid. Fix the following error:'
+            message = 'O documento não é válido'
     else:
-        form = DocumentForm()  # An empty, unbound form
+        form = DocumentForm()
 
-    # Load documents for the list page
     documents = Document.objects.all()
 
-    # Render list page with the documents and the form
     context = {'documents': documents, 'form': form,
                'message': message}
     return render(request, 'list.html', context)
@@ -36,6 +35,7 @@ def topsis_score(request):
     matrix = []
     weight = []
     criteria = []
+    criteria_list = []
     if request.method == 'POST':  # if user is reusing an already uploaded file
         doc = request.POST.get("filename")  # request.post.get returns a dict
         doc = os.path.abspath(os.getcwd()) + doc
@@ -57,7 +57,9 @@ def topsis_score(request):
                             criteria.append(False)
 
                 elif row[0] == '':
-                    pass
+                    del row[0]
+                    for c in row:
+                        criteria_list.append(c)
                 elif row[0] == 'pesos':
                     del row[0]
                     for s in row:
@@ -89,16 +91,15 @@ def topsis_score(request):
 
     topsis = Topsis(matrix, criteria, weight, alternative_list)
 
-    normalization_scores = topsis.normalize_matrix()
+    normalization_scores = np.around(topsis.normalize_matrix(), decimals=4)
     weighted_matrix = topsis.weight_matrix()
-    step4 = topsis.best_worst_ideal_solution()
-    find_distance = topsis.find_distance()
-    find_D = topsis.find_similarity_worse_decision()
+    step4 = np.around(topsis.best_worst_ideal_solution(), decimals=4)
+    find_distance = np.around(topsis.find_distance(), decimals=4)
+    topsis.find_similarity_worse_decision()
     score = topsis.ranking_by_worst()
-    score_inverted = topsis.ranking_by_worst_inverted()
 
-    context = {'normalization_scores': normalization_scores, 'weighted_matrix': weighted_matrix, 'step4': step4,
-               'find_distance': find_distance, 'find_D': find_D, 'ranking': score, 'ranking_inverted': score_inverted}
+    context = {'normalization_scores': normalization_scores, 'weighted_matrix': weighted_matrix.to_html(header=False, index=None), 'step4': step4,
+               'find_distance': find_distance, 'ranking': score}
     return render(request, 'score.html', context)
 
 

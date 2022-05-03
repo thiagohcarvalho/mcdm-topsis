@@ -4,36 +4,46 @@
         <meta charset="utf-8">
         <title>Topsis Score</title>
         {% load static %}
-        <link rel="stylesheet" href="{% static 'scores.css' %}">
+        <link rel="stylesheet" href="../static/list.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     </head>
 
     <body>
+        <h2>Ranqueamento de alternativas utilizando-se de método multicritérios</h2>
+
+        <div class="container">
         {% if documents %}
-            All documents in the database:
-            <ul>
+            Todos os arquivos contidos no banco de modelos:
+            <ul class="documents">
                 {% for document in documents %}
+
                     <form action="{% url "topsis-score" %}" method="POST">
                         {% csrf_token %}
-                        <button type="submit" value="{{ document.docfile.url }}" name="filename">{{ document.docfile.name }}</button>
+                        <button class="button-85" type="submit" value="{{ document.docfile.url }}" name="filename">{{ document.docfile.name }}</button>
                     </form>
+
 
                 {% endfor %}
             </ul>
             {% else %}
             <p>No documents.</p>
             {% endif %}
-            
+        </div>
         <form action="{% url "delete-files" %}" method="POST">
             {% csrf_token %}
-            <button type="submit" value="1">Clique aqui para deletar os arquivos</button>
+            <button class="button-85" type="submit" value="1">Clique aqui para excluir os arquivos</button>
         </form>
-
+       
         <!-- Upload form. -->
         <form action="{% url "my-view" %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            
+
             <p>{{ message }}</p>
-            
+
+            <p>Números decimais devem ser separados por vírgula!</p>
+
             <p>{{ form.non_field_errors }}</p>
 
             <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
@@ -43,7 +53,7 @@
                 {{ form.docfile }}
             </p>
 
-            <p><input type="submit" value="Upload"/></p>
+            <p><input class="button-36" type="submit" value="Enviar"/></p>
         </form>
 
 
